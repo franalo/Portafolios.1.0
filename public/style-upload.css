@@ -1,0 +1,260 @@
+:root {
+  --primary-color: #7d468c;
+  --secondary-color: #57f2aa;
+  --background-color: #120f26;
+  --text-color: #ffffff;
+  --accent-color: #897abf;
+  --card-background: #302a59;
+  --error-color: #ff6b6b;
+  --success-color: #57f2aa;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(to bottom, #120f26, #302a59);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 500px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: var(--card-background);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--secondary-color);
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.file-input-wrapper {
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.file-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.file-label:hover {
+  background-color: #8d569c;
+  transform: translateY(-2px);
+}
+
+.file-label:active {
+  transform: translateY(0);
+}
+
+.file-input {
+  display: none;
+}
+
+.file-label i {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.file-name {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--accent-color);
+  text-align: center;
+}
+
+.submit-button,
+.download-link,
+.visu-button {
+  width: 100%;
+  max-width: 300px;
+  padding: 0.75rem;
+  background-color: var(--secondary-color);
+  color: var(--background-color);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  margin-top: 1rem;
+  height: 50px;
+}
+
+.submit-button:hover,
+.download-link:hover,
+.visu-button:hover {
+  background-color: #68fdb8;
+  transform: translateY(-2px);
+}
+
+.submit-button:active,
+.download-link:active,
+.visu-button:active {
+  transform: translateY(0);
+}
+
+.submit-button i,
+.download-link i,
+.visu-button i {
+  margin-right: 10px;
+}
+
+.status-message {
+  text-align: center;
+  margin-top: 1rem;
+  font-weight: 600;
+  padding: 0.75rem;
+  border-radius: 8px;
+}
+
+.status-message.error {
+  background-color: rgba(255, 107, 107, 0.2);
+  color: var(--error-color);
+}
+
+.status-message.success {
+  background-color: rgba(87, 242, 170, 0.2);
+  color: var(--success-color);
+}
+
+.status-message.processing {
+  background-color: rgba(137, 122, 191, 0.2);
+  color: var(--accent-color);
+}
+
+.download-link {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+}
+
+.download-link:hover {
+  background-color: #9a8dcf;
+}
+
+.visu-button {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+}
+
+.visu-button:hover {
+  background-color: #8d569c;
+}
+
+@media (max-width: 600px) {
+  .container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+}
+
+.success-animation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.checkmark-container {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1rem;
+  background-color: black;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkmark {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2;
+  stroke: var(--success-color);
+  stroke-miterlimit: 10;
+  box-shadow: inset 0px 0px 0px var(--success-color);
+  animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+}
+
+.checkmark__circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: var(--success-color);
+  fill: none;
+  animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark__check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes scale {
+  0%, 100% {
+    transform: none;
+  }
+  50% {
+    transform: scale3d(1.1, 1.1, 1);
+  }
+}
+
+@keyframes fill {
+  100% {
+    box-shadow: inset 0px 0px 0px 30px transparent;
+  }
+}
+
+.success-message {
+  color: var(--success-color);
+  font-size: 1.5rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.result-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}

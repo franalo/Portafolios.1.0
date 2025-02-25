@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procesador de Archivos FIFO</title>
+    <link rel="stylesheet" href="style-upload.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="title">Procesador de Archivos FIFO</h1>
+        </header>
+        <main>
+            <form id="uploadForm" class="upload-form" enctype="multipart/form-data">
+                <div class="file-input-wrapper">
+                    <label for="fileInput" class="file-label">
+                        <i class="fas fa-file-excel"></i>
+                        <span class="file-label-text">Seleccionar archivo Excel</span>
+                        <input type="file" id="fileInput" name="file" accept=".xlsx" required class="file-input" />
+                    </label>
+                    <span id="fileName" class="file-name"></span>
+                </div>
+                <button type="submit" class="submit-button">
+                    <i class="fas fa-cogs"></i> Procesar Archivo
+                </button>
+            </form>
+
+            <div id="result" class="result-container">
+                <p id="statusMessage" class="status-message"></p>
+                <div id="successAnimation" class="success-animation" style="display: none;">
+                    <div class="checkmark-container">
+                        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                            <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                            <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                        </svg>
+                    </div>
+                    <h2 class="success-message">Datos Procesados Correctamente</h2>
+                </div>
+                <a id="downloadLink" class="download-link" style="display: none;" href="#" download="FIFO_Procesado.xlsx">
+                    <i class="fas fa-download"></i> Descargar Archivo Procesado
+                </a>
+                <button id="goToVisu" class="visu-button" style="display: none;" onclick="window.location.href='/index.html'">
+                    <i class="fas fa-chart-bar"></i> Ir a Visualización
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData();
+            const fileInput = document.getElementById('fileInput');
+            const statusMessage = document.getElementById('statusMessage');
+            const downloadLink = document.getElementById('downloadLink');
+            const goToVisuButton = document.getElementById('goToVisu');
+
+            if (!fileInput.files.length) {
+                showStatus('Por favor, selecciona un archivo.', 'error');
+                return;
+            }
+
+            formData.append('file', fileInput.files[0]);
+
+            try {
+                showStatus('Procesando archivo...', 'processing');
+                downloadLink.style.display = 'none';
+                goToVisuButton.style.display = 'none';
+
+                const response = await fetch('/api/process-fifo', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error procesando el archivo');
+                }
+
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    // Si la respuesta es JSON, manejamos el error
+                    const result = await response.json();
+                    showStatus(result.message, 'error');
+                } else {
+                    // Si la respuesta es HTML, la mostramos
+                    const htmlResponse = await response.text();
+                    document.body.innerHTML = htmlResponse;
+                }
+            } catch (error) {
+                showStatus('Hubo un error procesando el archivo.', 'error');
+                console.error(error);
+            }
+        });
+
+        document.getElementById('fileInput').addEventListener('change', (event) => {
+            const fileName = event.target.files[0]?.name || 'Ningún archivo seleccionado';
+            document.getElementById('fileName').textContent = fileName;
+        });
+
+        function showStatus(message, type) {
+            const statusMessage = document.getElementById('statusMessage');
+            const successAnimation = document.getElementById('successAnimation');
+            const downloadLink = document.getElementById('downloadLink');
+            const goToVisuButton = document.getElementById('goToVisu');
+
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+
+            if (type === 'success') {
+                statusMessage.style.display = 'none';
+                successAnimation.style.display = 'flex';
+                downloadLink.style.display = 'block';
+                goToVisuButton.style.display = 'block';
+            } else {
+                statusMessage.style.display = 'block';
+                successAnimation.style.display = 'none';
+                downloadLink.style.display = 'none';
+                goToVisuButton.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
